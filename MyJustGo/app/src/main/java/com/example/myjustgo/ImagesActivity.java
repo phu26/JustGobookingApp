@@ -51,6 +51,7 @@ public class ImagesActivity extends AppCompatActivity {
         adapter  = new ArrayAdapter<String>(ImagesActivity.this,
                 android.R.layout.simple_spinner_dropdown_item,spinnerDataList);
         spinner.setAdapter(adapter);
+
         red();
     }
 

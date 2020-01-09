@@ -28,7 +28,9 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="Upload Address"
-        android:layout_marginBottom="400dp"/>
+        android:layout_marginBottom="400dp"
+        android:onClick="btn_add"
+        />
 
     <Spinner
         android:id="@+id/DS_dd"

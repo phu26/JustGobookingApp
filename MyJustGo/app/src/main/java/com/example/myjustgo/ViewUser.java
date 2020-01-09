@@ -69,11 +69,12 @@ public class ViewUser extends AppCompatActivity {
         mButtonUpload = findViewById(R.id.btn_Upload2);
         mTextViewShowUploads = findViewById(R.id.view_show_uploads2);
         mEditTextFileName = findViewById(R.id.edit_filename2);
+        mEditTextFileName2 = findViewById(R.id.edit_filename2);
         mImageView = findViewById(R.id.image_view2);
 
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
-        mDatabaseRef2 = FirebaseDatabase.getInstance().getReference("uploads");
+        mDatabaseRef2 = FirebaseDatabase.getInstance().getReference("tours");
 
 
         mButtonChooseImage.setOnClickListener(new View.OnClickListener() {

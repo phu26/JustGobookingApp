@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "518436191046-ft5tn4ggdhtho30ktp10gjkhqammord6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myjustgo",
+            "certificate_hash": "ba2d57a22b8a58ee1804b267a60ac6d7a6525307"
+          }
+        },
+        {
           "client_id": "518436191046-403712ni9ljlpicedvr6pq4vgkbf6rtc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -46,13 +46,15 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="395dp"
+        android:layout_height="256dp"
         android:layout_above="@+id/progress_bar"
         android:layout_below="@+id/edit_filename"
         android:layout_marginTop="16dp"
 
-        />
+        android:layout_marginBottom="302dp" />
+
+
 
     <Button
         android:id="@+id/btn_Upload"

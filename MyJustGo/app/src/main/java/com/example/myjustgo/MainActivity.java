@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         mProgressBar = findViewById(R.id.progress_bar);
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Tours");
 
 
                 mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         if(mImageUri != null)
         {
             StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()+"."+getFileExtension(mImageUri));
-         mUploadTask = fileReference.putFile(mImageUri)
+            mUploadTask = fileReference.putFile(mImageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -127,9 +127,11 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             },500);
                             Toast.makeText(MainActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
-                            Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
+
+
+                            Upload upload = new Upload("",mEditTextFileName.getText().toString().trim(),"",
                                     taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
-                                    String uploadId = mDatabaseRef.push().getKey();
+                            String uploadId = mDatabaseRef.push().getKey();
                             mDatabaseRef.child(uploadId).setValue(upload);
 
 
@@ -144,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
-                                mProgressBar.setProgress((int)progress);
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                            mProgressBar.setProgress((int)progress);
 
                         }
                     });

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +45,7 @@ public class ViewUser extends AppCompatActivity {
     private Button mButtonUpload;
     private TextView mTextViewShowUploads;
     private EditText mEditTextFileName;
+    private EditText mEditTextFileName2;
     private ImageView mImageView;
     private ProgressBar mProgressBar;
     private Uri mImageUri;
@@ -51,7 +53,7 @@ public class ViewUser extends AppCompatActivity {
     private DatabaseReference mDatabaseRef;
     private DatabaseReference mDatabaseRef2;
     private StorageTask mUploadTask;
-
+    String DD="";
     ValueEventListener listener;
     ArrayAdapter<String> adapter;
     ArrayList<String> spinnerDataList;
@@ -69,12 +71,12 @@ public class ViewUser extends AppCompatActivity {
         mButtonUpload = findViewById(R.id.btn_Upload2);
         mTextViewShowUploads = findViewById(R.id.view_show_uploads2);
         mEditTextFileName = findViewById(R.id.edit_filename2);
-        mEditTextFileName2 = findViewById(R.id.edit_filename2);
+        mEditTextFileName2 = findViewById(R.id.edit_filename3);
         mImageView = findViewById(R.id.image_view2);
 
 
-        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
-        mDatabaseRef2 = FirebaseDatabase.getInstance().getReference("tours");
+        mStorageRef = FirebaseStorage.getInstance().getReference("Tours");
+        mDatabaseRef2 = FirebaseDatabase.getInstance().getReference("Tours");
 
 
         mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +121,7 @@ public class ViewUser extends AppCompatActivity {
                 }
                 else{
                     String item = parent.getItemAtPosition(position).toString();
+                    DD= item;
                     Toast.makeText(parent.getContext(), "selected"+item, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -150,6 +153,26 @@ public class ViewUser extends AppCompatActivity {
             }
         });
     }
+
+
+    private void openFileChoose() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode==RESULT_OK
+                && data!=null && data.getData()!= null ){
+            mImageUri =data.getData();
+            Picasso.with(this).load(mImageUri).into(mImageView);
+
+        }
+
+    }
     private void openImageActivity() {
         Intent intent = new Intent(this,ImagesActivity.class);
         startActivity(intent);
@@ -170,14 +193,10 @@ public class ViewUser extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mProgressBar.setProgress(0);
-                                }
-                            },500);
-                            Toast.makeText(ViewUser.this, "Upload successful", Toast.LENGTH_SHORT).show();
-                            Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
+
+
+
+                            Upload upload = new Upload(DD,mEditTextFileName.getText().toString().trim(),mEditTextFileName2.getText().toString().trim(),
                                     taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
                             String uploadId = mDatabaseRef2.push().getKey();
                             mDatabaseRef2.child(uploadId).setValue(upload);
@@ -195,7 +214,7 @@ public class ViewUser extends AppCompatActivity {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                             double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
-                            mProgressBar.setProgress((int)progress);
+
 
                         }
                     });
@@ -206,22 +225,4 @@ public class ViewUser extends AppCompatActivity {
 
     }
 
-
-    private void openFileChoose() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,PICK_IMAGE_REQUEST);
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode==RESULT_OK
-                && data!=null && data.getData()!= null ){
-            mImageUri =data.getData();
-            Picasso.with(this).load(mImageUri).into(mImageView);
-
-        }
-
-    }
 }

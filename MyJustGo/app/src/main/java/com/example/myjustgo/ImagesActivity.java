@@ -2,6 +2,8 @@ package com.example.myjustgo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
@@ -23,16 +25,20 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ImagesActivity extends AppCompatActivity {
 
+    private RecyclerView mRecyclerView;
+    private  ImageAdapter mAdapter;
+    private DatabaseReference mDatabaseRef2;
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     ValueEventListener listener;
     ArrayAdapter<String> adapter;
     ArrayList<String> spinnerDataList;
     private Button btn_Upload_Address;
-
+    private List<Upload> mUploads;
     Spinner spinner;
     EditText eData;
     String textData= "";
@@ -42,8 +48,30 @@ public class ImagesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images);
+        mRecyclerView = findViewById(R.id.recycler_View);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mUploads = new ArrayList<>();
 
+        mDatabaseRef2 = FirebaseDatabase.getInstance().getReference("Tours");
+        mDatabaseRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot postSnap : dataSnapshot.getChildren())
+                {
+                    Upload upload= postSnap.getValue(Upload.class);
+                    mUploads.add(upload);
+                }
+                mAdapter = new ImageAdapter(ImagesActivity.this,mUploads);
 
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(ImagesActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("spinner");
         eData = (EditText) findViewById(R.id.txt_add);
         spinner =(Spinner) findViewById(R.id.DS_dd);

@@ -6,10 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ImagesActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_View"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
 
     <EditText
         android:layout_width="match_parent "
@@ -40,5 +36,13 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="300dp" />
     />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_View"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+
+        android:layout_above="@+id/DS_dd"
+        android:layout_alignParentBottom="true"
+        ></androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>

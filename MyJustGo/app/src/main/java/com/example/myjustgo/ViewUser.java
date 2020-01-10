@@ -194,6 +194,15 @@ public class ViewUser extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Handler handler = new Handler();
 
+                            Task<Uri> result = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+
+                            result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String photoStringLink = uri.toString();
+                                }
+                            });
+                            Toast.makeText(ViewUser.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
 
                             Upload upload = new Upload(DD,mEditTextFileName.getText().toString().trim(),mEditTextFileName2.getText().toString().trim(),
